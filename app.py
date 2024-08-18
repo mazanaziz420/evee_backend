@@ -11,7 +11,7 @@ app = Flask(__name__)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
-app.secret_key = b'_5#y2L"F4    Q8z\n\xec]/'
+app.secret_key = b'_5y2LF4Q8z\n\xec-=/'
 
 from users import user_bp
 
