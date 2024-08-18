@@ -1,5 +1,5 @@
 from mailjet_rest import Client
-from setting import MAILJET_API_KEY, MAILJET_SECRET_KEY
+from commons.setting import MAILJET_API_KEY, MAILJET_SECRET_KEY
 
 def send_verification_email(email, verification_code, is_signup=True):
     mailjet = Client(auth=(MAILJET_API_KEY, MAILJET_SECRET_KEY), version='v3.1')

@@ -1,6 +1,6 @@
 from functools import wraps
 from flask import request,jsonify
-from utils import HttpCodes
+from commons.utils import HttpCodes
 from users.models import Users
 
 def verify_token(token):

@@ -2,7 +2,7 @@ from flask import Flask
 import os
 from dotenv import load_dotenv
 from flask_cors import CORS, cross_origin
-from setting import *
+from commons.setting import *
 from flask_mail import Mail
 
 load_dotenv()

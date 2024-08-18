@@ -2,9 +2,9 @@ from flask import request, Blueprint, jsonify, session
 from .send_email import send_verification_email
 from datetime import datetime
 from .query import *
-from setting import generate_verification_code, generate_jwt_token
-from utils import HttpCodes
-from decorator import protected
+from commons.setting import generate_verification_code, generate_jwt_token
+from commons.utils import HttpCodes
+from commons.decorator import protected
 from .validation import *
 from users.models import UserType
 
