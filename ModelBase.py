@@ -1,11 +1,12 @@
 import peewee as pw
-from setting import MYSQL_USER, MYSQL_DATABASE, MYSQLHOST, MYSQLPASSWORD, MYSQLPORT
+from setting import POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DATABASE, POSTGRES_HOST, POSTGRES_PORT
 
-db = pw.MySQLDatabase(
-    MYSQL_DATABASE,
-    host=MYSQLHOST,
-    user=MYSQL_USER,
-    password=MYSQLPASSWORD,
+db = pw.PostgresqlDatabase(
+    POSTGRES_DATABASE,
+    host=POSTGRES_HOST,
+    user=POSTGRES_USER,
+    password=POSTGRES_PASSWORD,
+    port=POSTGRES_PORT,
     connect_timeout=3600
 )
 

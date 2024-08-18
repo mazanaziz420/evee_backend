@@ -13,3 +13,4 @@ Flask-SQLAlchemy==3.0.5
 jsonschema
 PyJWT==2.6.0
 peewee_enum_field
+psycopg2-binary

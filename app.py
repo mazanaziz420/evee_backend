@@ -3,6 +3,7 @@ import os
 from dotenv import load_dotenv
 from flask_cors import CORS, cross_origin
 from flask_mail import Mail
+import scripts
 
 load_dotenv()
 
@@ -17,6 +18,7 @@ from users import user_bp
 app.register_blueprint(user_bp)
 mail = Mail(app)
 
+scripts.create_tables()
 
 def create_app(config):
     return app
