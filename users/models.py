@@ -1,6 +1,6 @@
 import peewee as pw
 from peewee_enum_field import EnumField
-from commons.ModelBase import Model
+from ModelBase import Model
 from enum import Enum
 
 class UserType(Enum):
