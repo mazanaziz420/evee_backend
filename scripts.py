@@ -1,5 +1,5 @@
 import peewee as pw
-from setting import POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DATABASE, POSTGRES_HOST, POSTGRES_PORT
+from setting import POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DATABASE, POSTGRES_HOST
 from enum import Enum
 
 # Define the database connection
@@ -8,7 +8,6 @@ db = pw.PostgresqlDatabase(
     host=POSTGRES_HOST,
     user=POSTGRES_USER,
     password=POSTGRES_PASSWORD,
-    port=POSTGRES_PORT
 )
 
 # Define the UserType Enum
