@@ -1,28 +1,17 @@
 from flask import Flask
-import os
-from dotenv import load_dotenv
-from flask_cors import CORS, cross_origin
-from flask_mail import Mail
-import scripts
-
-load_dotenv()
+from flask_jwt_extended import JWTManager
+from config import Config
+from routes.users_bp import users_bp
+from models import init_app
 
 app = Flask(__name__)
-cors = CORS(app)
-app.config['CORS_HEADERS'] = 'Content-Type'
+app.config.from_object(Config)
 
-app.secret_key = b'_5y2LF4Q8z\n\xec-=/'
+jwt = JWTManager(app)
 
-from users import user_bp
+init_app(app)
 
-app.register_blueprint(user_bp)
-mail = Mail(app)
-
-scripts.create_tables()
-
-def create_app(config):
-    return app
-
+app.register_blueprint(users_bp, url_prefix='/')
 
 if __name__ == '__main__':
     app.run(debug=True)

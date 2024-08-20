@@ -1,9 +1,9 @@
 from mailjet_rest import Client
-from setting import MAILJET_API_KEY, MAILJET_SECRET_KEY
+from config import Config
+
+mailjet = Client(auth=(Config.MAILJET_API_KEY, Config.MAILJET_SECRET_KEY), version='v3.1')
 
 def send_verification_email(email, verification_code, is_signup=True):
-    mailjet = Client(auth=(MAILJET_API_KEY, MAILJET_SECRET_KEY), version='v3.1')
-    
     if is_signup:
         subject = "Verification Code for Your EvePlan.pk Account"
         html_part = f'''
