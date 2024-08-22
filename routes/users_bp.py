@@ -5,6 +5,7 @@ from services.verification_service import generate_verification_code
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from werkzeug.security import generate_password_hash
 from models import *
+from utils import HttpCodes
 
 users_bp = Blueprint('users_bp', __name__)
 
@@ -14,7 +15,7 @@ def signup():
     existing_user = User.find_by_email(data['email'])
     
     if existing_user:
-        return jsonify({"message": "User already exists"}), 400
+        return jsonify({"message": "User already exists"}), HttpCodes.HTTP_400_BAD_REQUEST
     
     verification_code = generate_verification_code()
 
@@ -42,7 +43,7 @@ def signup():
     return jsonify({
         "message": "User created. Verification email sent.",
         "user": user_info
-    }), 201
+    }), HttpCodes.HTTP_201_OK
 
 @users_bp.route('/login', methods=['POST'])
 def login():
@@ -50,10 +51,10 @@ def login():
     user = User.find_by_email(data['email'])
     
     if not user or not User.verify_password(user['password'], data['password']):
-        return jsonify({"message": "Invalid credentials"}), 401
+        return jsonify({"message": "Invalid credentials"}), HttpCodes.HTTP_401_UNAUTHORIZED
 
     if not user['is_verified']:
-        return jsonify({"message": "Email not verified"}), 403
+        return jsonify({"message": "Email not verified"}), HttpCodes.HTTP_403_NOT_VERIFIED
 
     token = generate_access_token(user['email'])
 
@@ -68,7 +69,7 @@ def login():
     return jsonify({
         "token": token,
         "user": user_info
-    }), 200
+    }), HttpCodes.HTTP_200_OK
 
 @users_bp.route('/get_vcode', methods=['POST'])
 def get_verification_code():
@@ -76,7 +77,7 @@ def get_verification_code():
     user = User.find_by_email(data['email'])
     
     if not user:
-        return jsonify({"message": "User not found"}), 404
+        return jsonify({"message": "User not found"}), HttpCodes.HTTP_404_NOT_FOUND
 
     verification_code = generate_verification_code()
     mongo.db['User'].update_one(
@@ -85,7 +86,7 @@ def get_verification_code():
         )
     send_verification_email(data['email'], verification_code, is_signup=False)
 
-    return jsonify({"message": "Verification code sent"}), 200
+    return jsonify({"message": "Verification code sent"}), HttpCodes.HTTP_200_OK
 
 @users_bp.route('/reset_password/verify', methods=['POST'])
 def verify_code():
@@ -93,21 +94,21 @@ def verify_code():
     verification_code = data.get('verification_code')
     
     if not verification_code:
-        return jsonify({"message": "Invalid verification code"}), 400
+        return jsonify({"message": "Invalid verification code"}), HttpCodes.HTTP_400_BAD_REQUEST
     
     user = User.find_by_email(data['email'])
     
     if not user:
-        return jsonify({"message": "User not found"}), 404
+        return jsonify({"message": "User not found"}), HttpCodes.HTTP_404_NOT_FOUND
 
     if user['verification_code'] == verification_code:
         mongo.db['User'].update_one(
             {"email": data['email']},
             {"$set": {"is_verified": True}}
         )
-        return jsonify({"message": "Verification successful"}), 200
+        return jsonify({"message": "Verification successful"}), HttpCodes.HTTP_200_OK
     
-    return jsonify({"message": "Invalid verification code"}), 400
+    return jsonify({"message": "Invalid verification code"}), HttpCodes.HTTP_400_BAD_REQUEST
 
 
 @users_bp.route('/reset_password/update', methods=['POST'])
@@ -116,7 +117,7 @@ def reset_password():
     user = User.find_by_email(data['email'])
     
     if not user:
-        return jsonify({"message": "User not found"}), 404
+        return jsonify({"message": "User not found"}), HttpCodes.HTTP_404_NOT_FOUND
 
     if user['is_verified'] == True:
         new_password_hash = generate_password_hash(data['password'])
@@ -124,6 +125,6 @@ def reset_password():
             {"email": data['email']},
             {"$set": {"password": new_password_hash}}
         )
-        return jsonify({"message": "Password updated successfully"}), 200
+        return jsonify({"message": "Password updated successfully"}), HttpCodes.HTTP_200_OK
     
-    return jsonify({"message": "Invalid verification code"}), 400
+    return jsonify({"message": "Invalid verification code"}), HttpCodes.HTTP_400_BAD_REQUEST

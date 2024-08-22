@@ -8,3 +8,4 @@ jsonschema
 PyJWT==2.6.0
 Flask-PyMongo
 pymongo[srv]
+imagekitio
